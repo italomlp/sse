@@ -53,3 +53,4 @@ To send notifications, you can access the link https://v2-sse-mullet.vercel.app/
 - https://github.com/binaryminds/react-native-sse
 - https://pub.dev/packages/sse_client
 - https://github.com/fanout/django-eventstream
+- https://stackoverflow.com/a/5326159 (Very informational, with some use cases and comparisons)
