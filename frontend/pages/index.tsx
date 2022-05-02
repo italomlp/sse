@@ -3,21 +3,41 @@ import { useEffect, useState } from "react";
 import { serverUrl } from "../lib/constants";
 import INotification from "../lib/models/notification";
 
-const Home: NextPage = () => {
+const MESSAGE_TYPES = {
+  INITIAL_LOAD: "INITIAL_LOAD",
+  NEW_NOTIFICATION: "NEW_NOTIFICATION",
+  NEW_CLIENT_CONNECTED: "NEW_CLIENT_CONNECTED",
+  CLIENT_DISCONNECTED: "CLIENT_DISCONNECTED",
+};
+
+const HomeV2: NextPage = () => {
   const [notifications, setNotifications] = useState<INotification[]>([]);
   const [isConnected, setIsConnected] = useState(false);
+  const [numberOfClientsConnected, setNumberOfClientsConnected] = useState(0);
 
   useEffect(() => {
-    const eventStream = new EventSource(`${serverUrl}/v1/notifications`);
+    const eventStream = new EventSource(`${serverUrl}/v2/notifications`);
 
     eventStream.onmessage = (event) => {
       console.log("event received", event);
       const message = JSON.parse(event.data);
 
-      if (message.length) {
-        return setNotifications((prev) => [...prev, ...message]);
+      if (message.type === MESSAGE_TYPES.INITIAL_LOAD) {
+        setNumberOfClientsConnected(message.content.numberOfClients);
+        return setNotifications((prev) => [
+          ...prev,
+          ...message.content.notifications,
+        ]);
       }
-      return setNotifications((prev) => [...prev, message]);
+      if (message.type === MESSAGE_TYPES.NEW_NOTIFICATION) {
+        return setNotifications((prev) => [...prev, message.content]);
+      }
+      if (message.type === MESSAGE_TYPES.CLIENT_DISCONNECTED) {
+        return setNumberOfClientsConnected((prev) => prev - 1);
+      }
+      if (message.type === MESSAGE_TYPES.NEW_CLIENT_CONNECTED) {
+        return setNumberOfClientsConnected((prev) => prev + 1);
+      }
     };
 
     eventStream.onerror = (error) => {
@@ -40,6 +60,7 @@ const Home: NextPage = () => {
   return (
     <div>
       <p>Event source connected: {isConnected ? "Yes" : "No"}</p>
+      <p>Number of clients connected: {numberOfClientsConnected}</p>
       <hr></hr>
       <div>Notifications:</div>
       <table className="stats-table">
@@ -62,4 +83,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default HomeV2;
