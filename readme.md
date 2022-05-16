@@ -48,9 +48,10 @@ To send notifications, you can access the link https://v2-sse-mullet.vercel.app/
 
 ## Useful links
 
+- [Points that were used to guide the presentation](/presentation.md)
+- https://stackoverflow.com/a/5326159 (Very informative, with some use cases and comparisons)
 - https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events
 - https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
 - https://github.com/binaryminds/react-native-sse
 - https://pub.dev/packages/sse_client
 - https://github.com/fanout/django-eventstream
-- https://stackoverflow.com/a/5326159 (Very informational, with some use cases and comparisons)

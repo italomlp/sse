@@ -32,7 +32,7 @@ router.get("/notifications", (req, res) => {
   const clientId = Date.now();
   const newClient = {
     id: clientId,
-    res: res,
+    res,
   };
 
   // add new client to our list of clients
